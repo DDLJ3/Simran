@@ -1,0 +1,50 @@
+import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { AuthService } from './auth.service';
+
+@Component({
+  selector: 'app-root',
+  standalone: true,
+  imports: [CommonModule, FormsModule],
+  templateUrl: './app.component.html'
+})
+export class AppComponent {
+
+  constructor(private auth: AuthService) {}
+
+  registerData = {
+    name: '',
+    email: '',
+    password: ''
+  };
+
+  loginData = {
+    email: '',
+    password: ''
+  };
+
+  loggedIn = false;
+
+  profile: any = {};
+
+  register() {
+    this.auth.register(this.registerData);
+    alert('Registered Successfully');
+  }
+
+  login() {
+
+    const success = this.auth.login(
+      this.loginData.email,
+      this.loginData.password
+    );
+
+    if (success) {
+      this.loggedIn = true;
+      this.profile = this.auth.getUser();
+    } else {
+      alert('Invalid Credentials');
+    }
+  }
+}
