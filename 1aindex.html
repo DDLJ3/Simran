@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Admin Dashboard</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    
+    <style>
+        body { background-color: #f4f7fc; min-height: 100vh; }
+        
+        /* Sidebar Desktop Logic */
+        @media (min-width: 992px) {
+            .sidebar {
+                position: fixed; top: 0; bottom: 0; left: 0;
+                width: 260px; background-color: #111827; z-index: 1000;
+            }
+            .main-content { margin-left: 260px; }
+        }
+
+        .nav-link {
+            color: #d1d5db;
+            padding: 12px 20px;
+            cursor: pointer;
+            border-radius: 8px;
+            margin: 4px 10px;
+        }
+
+        /* BOOTSTRAP Utility: Using .active class for highlighting */
+        .nav-link.active {
+            background: #2563eb !important;
+            color: white !important;
+        }
+
+        .nav-link:hover:not(.active) {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        /* View Switching Logic */
+        .content-view { display: none; }
+        .content-view.active-view { display: block; animation: fadeIn 0.3s; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Mobile Navbar (Visible only on small screens) -->
+<nav class="navbar navbar-dark bg-dark d-lg-none px-3">
+    <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileSidebar">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <span class="navbar-brand">Admin Panel</span>
+</nav>
+
+<!-- Sidebar (Desktop) -->
+<nav class="sidebar d-none d-lg-block shadow">
+    <div class="p-4 text-white text-center fw-bold fs-4 border-bottom border-secondary mb-3">
+        Admin Panel
+    </div>
+    <div class="nav flex-column nav-pills">
+        <a class="nav-link active" onclick="showView('dashboard', this)"><i class="bi bi-speedometer2 me-2"></i> Dashboard</a>
+        <a class="nav-link" onclick="showView('orders', this)"><i class="bi bi-cart me-2"></i> Orders</a>
+        <a class="nav-link" onclick="showView('customers', this)"><i class="bi bi-people me-2"></i> Customers</a>
+        <a class="nav-link" onclick="showView('analytics', this)"><i class="bi bi-bar-chart me-2"></i> Analytics</a>
+        <a class="nav-link" onclick="showView('settings', this)"><i class="bi bi-gear me-2"></i> Settings</a>
+    </div>
+</nav>
+
+<!-- Offcanvas Sidebar (Mobile) -->
+<div class="offcanvas offcanvas-start bg-dark text-white" tabindex="-1" id="mobileSidebar">
+    <div class="offcanvas-header border-bottom border-secondary">
+        <h5 class="offcanvas-title">Menu</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
+    </div>
+    <div class="offcanvas-body p-0 pt-3">
+        <div class="nav flex-column">
+            <a class="nav-link active" data-bs-dismiss="offcanvas" onclick="showView('dashboard', this)">Dashboard</a>
+            <a class="nav-link" data-bs-dismiss="offcanvas" onclick="showView('orders', this)">Orders</a>
+            <a class="nav-link" data-bs-dismiss="offcanvas" onclick="showView('customers', this)">Customers</a>
+        </div>
+    </div>
+</div>
+
+<!-- Main Content Area -->
+<div class="main-content">
+    <header class="bg-white shadow-sm p-3 mb-4 d-flex justify-content-between align-items-center mx-lg-3 mt-lg-3 rounded">
+        <h4 id="page-title" class="mb-0">Dashboard</h4>
+        <div class="dropdown">
+            <button class="btn btn-light border dropdown-toggle" data-bs-toggle="dropdown">Admin</button>
+            <ul class="dropdown-menu dropdown-menu-end">
+                <li><a class="dropdown-item" href="#">Profile</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item text-danger" href="#">Logout</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <div class="container-fluid px-4">
+        
+        <!-- DASHBOARD VIEW -->
+        <section id="dashboard" class="content-view active-view">
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="card border-0 shadow-sm bg-primary text-white p-4">
+                        <h6>Revenue</h6>
+                        <h2>₹75,000</h2>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card border-0 shadow-sm bg-success text-white p-4">
+                        <h6>New Users</h6>
+                        <h2>154</h2>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ORDERS VIEW -->
+        <section id="orders" class="content-view">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <h5>Recent Orders</h5>
+                    <p class="text-muted">Manage your store transactions here.</p>
+                    <table class="table table-hover">
+                        <thead><tr><th>Order ID</th><th>Customer</th><th>Status</th></tr></thead>
+                        <tbody><tr><td>#ORD-001</td><td>Rushikesh</td><td><span class="badge bg-success">Shipped</span></td></tr></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- CUSTOMERS VIEW -->
+        <section id="customers" class="content-view">
+            <div class="card border-0 shadow-sm p-4">
+                <h5>Customer Directory</h5>
+                <input type="text" class="form-control mb-3" placeholder="Search customers...">
+                <p>Displaying list of registered users...</p>
+            </div>
+        </section>
+
+        <!-- ANALYTICS VIEW -->
+        <section id="analytics" class="content-view">
+            <div class="alert alert-info">Visual charts and data reports will load here.</div>
+        </section>
+
+        <!-- SETTINGS VIEW -->
+        <section id="settings" class="content-view">
+            <div class="card border-0 shadow-sm p-4">
+                <h5>Account Settings</h5>
+                <form class="mt-3">
+                    <div class="mb-3"><label class="form-label">Email Address</label><input type="email" class="form-control" value="admin@example.com"></div>
+                    <button type="button" class="btn btn-primary">Save Changes</button>
+                </form>
+            </div>
+        </section>
+
+    </div>
+</div>
+
+<!-- Bootstrap Bundle JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    function showView(viewId, element) {
+        // 1. Hide all views
+        document.querySelectorAll('.content-view').forEach(view => {
+            view.classList.remove('active-view');
+        });
+
+        // 2. Show requested view
+        document.getElementById(viewId).classList.add('active-view');
+
+        // 3. Update active state in sidebar
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.classList.remove('active');
+        });
+        element.classList.add('active');
+
+        // 4. Update Header Title
+        const titleMap = {
+            'dashboard': 'Dashboard Overview',
+            'orders': 'Manage Orders',
+            'customers': 'Customer Base',
+            'analytics': 'Performance Analytics',
+            'settings': 'System Settings'
+        };
+        document.getElementById('page-title').innerText = titleMap[viewId];
+    }
+</script>
+</body>
+</html>

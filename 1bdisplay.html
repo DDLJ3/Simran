@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>User List</title>
+</head>
+<body>
+
+<h2>Registered Users</h2>
+
+<table border="1">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+        </tr>
+    </thead>
+    <tbody id="userTable"></tbody>
+</table>
+
+<script>
+    let users = JSON.parse(localStorage.getItem("users")) || [];
+
+    let table = document.getElementById("userTable");
+
+    users.forEach(user => {
+        let row = `<tr>
+                        <td>${user.name}</td>
+                        <td>${user.email}</td>
+                   </tr>`;
+        table.innerHTML += row;
+    });
+</script>
+
+</body>
+</html>
